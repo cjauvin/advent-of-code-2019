@@ -13,8 +13,4 @@ def steps_to_com(o):
 
 
 print("Part 1:", sum(len(steps_to_com(o)) for o in tree.keys()))
-
-you = steps_to_com("YOU")
-san = steps_to_com("SAN")
-
-print("Part 2:", len((san | you) - (san & you)))
+print("Part 2:", len((steps_to_com("YOU") ^ steps_to_com("SAN"))))
