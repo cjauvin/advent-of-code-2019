@@ -7,8 +7,9 @@ def decode_instruction(i):
     return tuple(map(int, [s[-2:], s[-3], s[-4], s[-5]]))
 
 
-def intcode(source):
-    prog = list(map(int, source.split(",")))
+# def intcode(source):
+def intcode(prog, debug=False):
+    # prog = list(map(int, source.split(",")))
     prog = defaultdict(int, zip(range(len(prog)), prog))
     i = 0  # instruction pointer
     relative_base = 0
@@ -37,17 +38,20 @@ def intcode(source):
         elif opc == 3:
             assert m1 in [0, 2]
             w3 = prog[i + 1] + (relative_base if m1 == 2 else 0)
-            # print("waiting for input..")
+            if debug:
+                print("waiting for input..")
             input_ = yield
             # print(f"received {input_}")
             assert type(input_) is int, f"received invalid input: {input_}"
-            # print(f"setting {input_} in {w3}")
+            if debug:
+                print(f"setting {input_} in {w3}")
             prog[w3] = input_
             i += 2
 
         elif opc == 4:
             out = get_param(m1, 1)
-            # print(f"outputting {out}")
+            if debug:
+                print(f"outputting {out}")
             yield out
             i += 2
 
